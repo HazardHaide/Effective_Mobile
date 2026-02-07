@@ -1,0 +1,44 @@
+{
+  "stores": [
+    {
+      "id": "metro",
+      "name": "METRO",
+      "logoUrl": "https://cdn.petrushka.ru/logos/metro.png",
+      "deliveryInfo": {
+        "type": "scheduled",
+        "nearestSlot": "сегодня 21:00–23:00"
+      },
+      "externalLink": "https://metro.ru"
+    },
+    {
+      "id": "auchan",
+      "name": "Ашан",
+      "logoUrl": "https://cdn.petrushka.ru/logos/auchan.png",
+      "deliveryInfo": {
+        "type": "scheduled",
+        "nearestSlot": "сегодня 18:00–20:00"
+      },
+      "externalLink": "https://auchan.ru"
+    },
+    {
+      "id": "vkusvill",
+      "name": "ВкусВилл",
+      "logoUrl": "https://cdn.petrushka.ru/logos/vkusvill.png",
+      "deliveryInfo": {
+        "type": "fast",
+        "nearestSlot": "от 20 до 60 минут"
+      },
+      "externalLink": "https://vkusvill.ru"
+    },
+    {
+      "id": "victoria",
+      "name": "Виктория",
+      "logoUrl": "https://cdn.petrushka.ru/logos/victoria.png",
+      "deliveryInfo": {
+        "type": "scheduled",
+        "nearestSlot": "сегодня 17:00–19:00"
+      },
+      "externalLink": "https://victoria-group.ru"
+    }
+  ]
+}
