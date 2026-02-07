@@ -1,0 +1,157 @@
+openapi: 3.0.3
+info:
+  title: Petrushka Green Partner Stores API
+  version: 1.0.0
+  description: API для экрана партнерских магазинов.
+
+servers:
+  - url: https://api.petrushka-green.ru
+
+tags:
+  - name: Partner Stores
+    description: Партнерские магазины
+
+paths:
+  /api/v1/partner-stores:
+    get:
+      tags: [Partner Stores]
+      summary: Получить список партнерских магазинов
+      description: |
+        Возвращает список магазинов для экрана партнеров.
+      operationId: getPartnerStores
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PartnerStoresResponse"
+              examples:
+                default:
+                  summary: Пример ответа
+                  value:
+                    stores:
+                      - id: metro
+                        name: METRO
+                        logoUrl: https://cdn.petrushka.ru/logos/metro.png
+                        deliveryInfo:
+                          type: scheduled
+                          nearestSlot: "сегодня 21:00–23:00"
+                        externalLink: https://metro.ru
+                      - id: auchan
+                        name: "Ашан"
+                        logoUrl: https://cdn.petrushka.ru/logos/auchan.png
+                        deliveryInfo:
+                          type: scheduled
+                          nearestSlot: "сегодня 18:00–20:00"
+                        externalLink: https://auchan.ru
+                      - id: vkusvill
+                        name: "ВкусВилл"
+                        logoUrl: https://cdn.petrushka.ru/logos/vkusvill.png
+                        deliveryInfo:
+                          type: fast
+                          nearestSlot: "от 20 до 60 минут"
+                        externalLink: https://vkusvill.ru
+                      - id: victoria
+                        name: "Виктория"
+                        logoUrl: https://cdn.petrushka.ru/logos/victoria.png
+                        deliveryInfo:
+                          type: scheduled
+                          nearestSlot: "сегодня 17:00–19:00"
+                        externalLink: https://victoria-group.ru
+        "401":
+          description: Неавторизован (нет/невалидный токен)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              examples:
+                unauthorized:
+                  value:
+                    code: unauthorized
+                    message: "Unauthorized"
+        "500":
+          description: Ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              examples:
+                serverError:
+                  value:
+                    code: internal_error
+                    message: "Internal server error"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    PartnerStoresResponse:
+      type: object
+      additionalProperties: false
+      required: [stores]
+      properties:
+        stores:
+          type: array
+          description: Список партнерских магазинов
+          items:
+            $ref: "#/components/schemas/PartnerStore"
+
+    PartnerStore:
+      type: object
+      additionalProperties: false
+      required: [id, name, logoUrl, deliveryInfo, externalLink]
+      properties:
+        id:
+          type: string
+          description: Уникальный идентификатор магазина (slug)
+          example: metro
+        name:
+          type: string
+          description: Отображаемое имя магазина
+          example: METRO
+        logoUrl:
+          type: string
+          format: uri
+          description: URL логотипа магазина
+          example: https://cdn.petrushka.ru/logos/metro.png
+        deliveryInfo:
+          $ref: "#/components/schemas/DeliveryInfo"
+        externalLink:
+          type: string
+          format: uri
+          description: Внешняя ссылка на сайт магазина
+          example: https://metro.ru
+
+    DeliveryInfo:
+      type: object
+      additionalProperties: false
+      required: [type, nearestSlot]
+      properties:
+        type:
+          type: string
+          description: Тип доставки
+          enum: [scheduled, fast]
+          example: scheduled
+        nearestSlot:
+          type: string
+          description: Текст ближайшего слота/интервала доставки.
+          example: "сегодня 21:00–23:00"
+
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          example: unauthorized
+        message:
+          type: string
+          example: "Unauthorized"
